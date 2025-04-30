@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Add Person{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Person</h2>
+    <form method="POST" action="{{ url_for('add_person') }}">
+        <div class="form-group mb-3">
+            <label for="person_type">Person Type</label>
+            <select class="form-control" id="person_type" name="person_type" required>
+                <option value="">Select Type</option>
+                <option value="pilot">Pilot</option>
+                <option value="passenger">Passenger</option>
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="personID">Person ID</label>
+            <input type="text" class="form-control" id="personID" name="personID" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="first_name">First Name</label>
+            <input type="text" class="form-control" id="first_name" name="first_name" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="last_name">Last Name</label>
+            <input type="text" class="form-control" id="last_name" name="last_name">
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="locationID">Location ID</label>
+            <input type="text" class="form-control" id="locationID" name="locationID" required>
+        </div>
+
+        <!-- Pilot-specific fields -->
+        <div id="pilot_fields" style="display: none;">
+            <div class="form-group mb-3">
+                <label for="taxID">Tax ID</label>
+                <input type="text" class="form-control" id="taxID" name="taxID">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="experience">Experience</label>
+                <input type="number" class="form-control" id="experience" name="experience" min="0">
+            </div>
+        </div>
+
+        <!-- Passenger-specific fields -->
+        <div id="passenger_fields" style="display: none;">
+            <div class="form-group mb-3">
+                <label for="miles">Frequent Flyer Miles</label>
+                <input type="number" class="form-control" id="miles" name="miles" min="0">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="funds">Funds</label>
+                <input type="number" class="form-control" id="funds" name="funds" min="0">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Person</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('person_type').addEventListener('change', function() {
+    const pilotFields = document.getElementById('pilot_fields');
+    const passengerFields = document.getElementById('passenger_fields');
+    
+    if (this.value === 'pilot') {
+        pilotFields.style.display = 'block';
+        passengerFields.style.display = 'none';
+        document.getElementById('taxID').required = true;
+        document.getElementById('experience').required = true;
+        document.getElementById('miles').required = false;
+        document.getElementById('funds').required = false;
+    } else if (this.value === 'passenger') {
+        pilotFields.style.display = 'none';
+        passengerFields.style.display = 'block';
+        document.getElementById('taxID').required = false;
+        document.getElementById('experience').required = false;
+        document.getElementById('miles').required = true;
+        document.getElementById('funds').required = true;
+    } else {
+        pilotFields.style.display = 'none';
+        passengerFields.style.display = 'none';
+        document.getElementById('taxID').required = false;
+        document.getElementById('experience').required = false;
+        document.getElementById('miles').required = false;
+        document.getElementById('funds').required = false;
+    }
+});
+</script>
+{% endblock %} 

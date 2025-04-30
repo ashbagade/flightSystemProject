@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Flight Landing{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Record Flight Landing</h2>
+    <form method="POST" action="{{ url_for('flight_landing') }}">
+        <div class="form-group">
+            <label for="flight_id">Flight ID</label>
+            <input type="text" class="form-control" id="flight_id" name="flight_id" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Record Landing</button>
+    </form>
+</div>
+{% endblock %} 

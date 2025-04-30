@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Flights In The Air{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Flights Currently In The Air</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Departing From</th>
+                <th>Arriving At</th>
+                <th>Number of Flights</th>
+                <th>Flight IDs</th>
+                <th>Earliest Arrival</th>
+                <th>Latest Arrival</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight.departing_from }}</td>
+                <td>{{ flight.arriving_at }}</td>
+                <td>{{ flight.num_flights }}</td>
+                <td>{{ flight.flight_list }}</td>
+                <td>{{ flight.earliest_arrival }}</td>
+                <td>{{ flight.latest_arrival }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 
