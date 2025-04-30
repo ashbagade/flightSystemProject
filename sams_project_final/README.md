@@ -71,8 +71,8 @@ sams_project_final/
 - Backend: Flask (Python)
 - Database: MySQL 8.0
 - Frontend: HTML, Bootstrap, JavaScript
-- No ORM (Direct SQL queries as per requirements)
+  We have basic HTML pages that allow users to interact with our backing database, powered by a Flash backend.
 
 ## Team Members
 
-[Add team member names here]
+All team members worked equally on a combination of implementing procedures and views, frontend development, and debugging.
