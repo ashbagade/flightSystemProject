@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Alternative Airports{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Cities with Multiple Airports</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Country</th>
+                    <th>Number of Airports</th>
+                    <th>Airport Codes</th>
+                    <th>Airport Names</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for city in cities %}
+                <tr>
+                    <td>{{ city.city }}</td>
+                    <td>{{ city.state }}</td>
+                    <td>{{ city.country }}</td>
+                    <td>{{ city.num_airports }}</td>
+                    <td>{{ city.airport_code_list }}</td>
+                    <td>{{ city.airport_name_list }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not cities %}
+    <div class="alert alert-info">No cities with multiple airports found.</div>
+    {% endif %}
+</div>
+{% endblock %}
