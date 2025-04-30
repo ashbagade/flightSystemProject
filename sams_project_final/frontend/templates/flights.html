@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Flights{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Flights In The Air</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Departing From</th>
+                    <th>Arriving At</th>
+                    <th>Number of Flights</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights_air %}
+                <tr>
+                    <td>{{ flight.departing_from }}</td>
+                    <td>{{ flight.arriving_at }}</td>
+                    <td>{{ flight.num_flights }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="mb-4 mt-5">Flights On The Ground</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Airport</th>
+                    <th>Number of Flights</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights_ground %}
+                <tr>
+                    <td>{{ flight.departing_from }}</td>
+                    <td>{{ flight.num_flights }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

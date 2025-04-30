@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Pilot{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Edit Pilot</h2>
+    
+    <form action="{{ url_for('edit_pilot', pid=pilot.personID) }}" method="POST">
+        <div class="mb-3">
+            <label for="personID" class="form-label">Person ID</label>
+            <input type="text" class="form-control" id="personID" value="{{ pilot.personID }}" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="taxID" class="form-label">Tax ID</label>
+            <input type="text" class="form-control" id="taxID" name="taxID" value="{{ pilot.taxID }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="experience" class="form-label">Experience (years)</label>
+            <input type="number" class="form-control" id="experience" name="experience" value="{{ pilot.experience }}" required min="0">
+        </div>
+        <div class="mb-3">
+            <label for="commanding_flight" class="form-label">Commanding Flight</label>
+            <input type="text" class="form-control" id="commanding_flight" name="commanding_flight" value="{{ pilot.commanding_flight or '' }}">
+        </div>
+        <div class="mt-4">
+            <a href="{{ url_for('pilots') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 

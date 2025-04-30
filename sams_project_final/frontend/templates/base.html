@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - SAMS</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { padding-top: 60px; }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('flights') }}">Flights</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('airplanes') }}">Airplanes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('airlines') }}">Airlines</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('airports') }}">Airports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('passengers') }}">Passengers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('pilots') }}">Pilots</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('reservations') }}">Reservations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('add_person') }}">Add Person</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('pilot_license') }}">Pilot License</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('offer_flight') }}">Offer Flight</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

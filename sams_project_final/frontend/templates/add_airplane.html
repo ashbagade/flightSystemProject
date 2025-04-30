@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Airplane{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Procedure: Add Airplane</h2>
+    
+    <div class="card bg-light">
+        <div class="card-body">
+            <div class="mb-3">
+                <h5>add_airplane()</h5>
+            </div>
+            
+            <form action="{{ url_for('add_airplane') }}" method="POST">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Airline ID</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="airlineID" value="United">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Tail Num</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="tail_num" value="nk780b">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Seat Cap</div>
+                            <div class="card-body bg-light">
+                                <input type="number" class="form-control border-0 bg-light" name="seat_capacity" value="120">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Speed</div>
+                            <div class="card-body bg-light">
+                                <input type="number" class="form-control border-0 bg-light" name="speed" value="345">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Location ID</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="locationID" value="port_190">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Plane Type</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="plane_type" value="Airbus">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Maintained</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="maintenanced" value="NULL" id="maintenanced">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Model</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="model" value="NULL" id="model">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">Neo</div>
+                            <div class="card-body bg-light">
+                                <input type="text" class="form-control border-0 bg-light" name="neo" value="TRUE" id="neo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-4 mt-4">
+                    <a href="{{ url_for('airplanes') }}" class="btn btn-secondary px-4">Cancel</a>
+                    <button type="submit" class="btn btn-secondary px-4">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add JavaScript to enforce validation rules
+    document.addEventListener('DOMContentLoaded', function() {
+        const planeTypeInput = document.querySelector('input[name="plane_type"]');
+        const maintenancedInput = document.getElementById('maintenanced');
+        const modelInput = document.getElementById('model');
+        const neoInput = document.getElementById('neo');
+        
+        // Function to update field values based on plane type
+        function updateFields() {
+            const planeType = planeTypeInput.value;
+            
+            if (planeType === 'Boeing') {
+                // Boeing requires maintenance and model, no neo
+                maintenancedInput.value = maintenancedInput.value === 'NULL' ? 'TRUE' : maintenancedInput.value;
+                modelInput.value = modelInput.value === 'NULL' ? '737' : modelInput.value;
+                neoInput.value = 'NULL';
+            } else if (planeType === 'Airbus') {
+                // Airbus requires neo, no maintenance or model
+                maintenancedInput.value = 'NULL';
+                modelInput.value = 'NULL';
+                neoInput.value = neoInput.value === 'NULL' ? 'TRUE' : neoInput.value;
+            } else {
+                // Other types have no special requirements
+                maintenancedInput.value = 'NULL';
+                modelInput.value = 'NULL';
+                neoInput.value = 'NULL';
+            }
+        }
+        
+        // Set up event listener
+        planeTypeInput.addEventListener('input', updateFields);
+        
+        // Initialize fields
+        updateFields();
+    });
+</script>
+{% endblock %}

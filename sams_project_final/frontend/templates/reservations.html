@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Reservations</h2>
+    
+    <!-- Add Reservation Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>Add New Reservation</h4>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('add_reservation') }}" method="POST">
+                <div class="form-group">
+                    <label for="personID">Person ID</label>
+                    <input type="text" class="form-control" id="personID" name="personID" required>
+                </div>
+                <div class="form-group">
+                    <label for="airportID">Airport ID</label>
+                    <input type="text" class="form-control" id="airportID" name="airportID" required maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="sequence">Sequence</label>
+                    <input type="number" class="form-control" id="sequence" name="sequence" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Reservation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reservations Table -->
+    <div class="card">
+        <div class="card-header">
+            <h4>All Reservations</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Person ID</th>
+                            <th>Airport ID</th>
+                            <th>Sequence</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation[0] }}</td>
+                            <td>{{ reservation[1] }}</td>
+                            <td>{{ reservation[2] }}</td>
+                            <td>
+                                <form action="{{ url_for('delete_reservation', pid=reservation[0], aid=reservation[1]) }}" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this reservation?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

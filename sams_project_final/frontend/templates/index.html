@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to SAMS</h1>
+        <p class="lead">Simple Airline Management System</p>
+        <hr class="my-4">
+        <p>Use the navigation menu above to manage flights, people, airplanes, and airports.</p>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Flights</h5>
+                    <p class="card-text">View all flights currently in the air and on the ground.</p>
+                    <a href="{{ url_for('flights') }}" class="btn btn-primary">View Flights</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">People</h5>
+                    <p class="card-text">Track passengers and pilots in the system.</p>
+                    <a href="{{ url_for('passengers') }}" class="btn btn-primary">View Passengers</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Management</h5>
+                    <p class="card-text">Manage airlines, airports, and other resources.</p>
+                    <a href="{{ url_for('airlines') }}" class="btn btn-primary">View Airlines</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

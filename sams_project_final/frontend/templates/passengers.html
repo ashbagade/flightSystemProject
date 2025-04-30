@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Passengers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Passengers</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Person ID</th>
+                    <th>Miles</th>
+                    <th>Funds</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for passenger in passengers %}
+                <tr>
+                    <td>{{ passenger.personID }}</td>
+                    <td>{{ passenger.miles }}</td>
+                    <td>${{ passenger.funds }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

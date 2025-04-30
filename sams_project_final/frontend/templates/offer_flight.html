@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Offer Flight{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Procedure: Offer Flight</h2>
+    <div class="card mt-4">
+        <div class="card-body" style="background:#f5f5f5;">
+            <h4>offer_flight()</h4>
+            <form action="{{ url_for('offer_flight') }}" method="POST">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Flight ID</label>
+                        <input type="text" class="form-control" name="flightID" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Route ID</label>
+                        <input type="text" class="form-control" name="routeID" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Support Airline</label>
+                        <input type="text" class="form-control" name="support_airline" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Support Tail</label>
+                        <input type="text" class="form-control" name="support_tail" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Progress</label>
+                        <input type="number" class="form-control" name="progress" value="0" min="0" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Next Time</label>
+                        <input type="time" class="form-control" name="next_time" required>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold bg-secondary text-white p-2 w-100">Cost</label>
+                        <input type="number" class="form-control" name="cost" step="0.01" required>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('flights') }}" class="btn btn-secondary w-25">Cancel</a>
+                    <button type="submit" class="btn btn-dark w-25">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 
