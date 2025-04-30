@@ -129,9 +129,15 @@ def delete_airport(aid):
 def flights():
     conn = get_db_connection()
     with conn, conn.cursor() as cur:
-        cur.execute("SELECT * FROM flight;")
-        data = cur.fetchall()
-    return render_template('flights.html', flights=data)
+        # Get flights in the air
+        cur.execute("SELECT * FROM people_in_the_air;")
+        flights_air = cur.fetchall()
+        
+        # Get flights on the ground
+        cur.execute("SELECT * FROM people_on_the_ground;")
+        flights_ground = cur.fetchall()
+        
+    return render_template('flights.html', flights_air=flights_air, flights_ground=flights_ground)
 
 @app.route('/flights/add', methods=['POST'])
 def add_flight():
@@ -202,6 +208,49 @@ def pilots():
         data = cur.fetchall()
     return render_template('pilots.html', pilots=data)
 
+@app.route('/pilots/add', methods=['POST'])
+def add_pilot():
+    f = request.form
+    sql = """INSERT INTO pilot
+          (personID, taxID, experience, commanding_flight)
+          VALUES (%s,%s,%s,%s);"""
+    conn = get_db_connection()
+    with conn, conn.cursor() as cur:
+        cur.execute(sql, (
+          f['personID'], f['taxID'],
+          f['experience'], f.get('commanding_flight') or None
+        ))
+        conn.commit()
+    return redirect(url_for('pilots'))
+
+@app.route('/pilots/edit/<pid>', methods=['GET','POST'])
+def edit_pilot(pid):
+    conn = get_db_connection()
+    if request.method=='POST':
+        f = request.form
+        sql = """UPDATE pilot
+                 SET taxID=%s, experience=%s, commanding_flight=%s
+                 WHERE personID=%s;"""
+        with conn, conn.cursor() as cur:
+            cur.execute(sql, (
+                f['taxID'], f['experience'],
+                f.get('commanding_flight') or None, pid
+            ))
+            conn.commit()
+        return redirect(url_for('pilots'))
+    with conn, conn.cursor() as cur:
+        cur.execute("SELECT * FROM pilot WHERE personID=%s;", (pid,))
+        rec = cur.fetchone()
+    return render_template('edit_pilot.html', pilot=rec)
+
+@app.route('/pilots/delete/<pid>', methods=['POST'])
+def delete_pilot(pid):
+    conn = get_db_connection()
+    with conn, conn.cursor() as cur:
+        cur.execute("DELETE FROM pilot WHERE personID=%s;", (pid,))
+        conn.commit()
+    return redirect(url_for('pilots'))
+
 
 # ─── RESERVATIONS ───────────────────────────────────────────────────────────────
 @app.route('/reservations')
@@ -211,6 +260,28 @@ def reservations():
         cur.execute("SELECT * FROM passenger_vacations;")
         data = cur.fetchall()
     return render_template('reservations.html', reservations=data)
+
+@app.route('/reservations/add', methods=['POST'])
+def add_reservation():
+    f = request.form
+    sql = """INSERT INTO passenger_vacations
+          (personID, airportID, sequence)
+          VALUES (%s,%s,%s);"""
+    conn = get_db_connection()
+    with conn, conn.cursor() as cur:
+        cur.execute(sql, (
+          f['personID'], f['airportID'], f['sequence']
+        ))
+        conn.commit()
+    return redirect(url_for('reservations'))
+
+@app.route('/reservations/delete/<pid>/<aid>', methods=['POST'])
+def delete_reservation(pid, aid):
+    conn = get_db_connection()
+    with conn, conn.cursor() as cur:
+        cur.execute("DELETE FROM passenger_vacations WHERE personID=%s AND airportID=%s;", (pid, aid))
+        conn.commit()
+    return redirect(url_for('reservations'))
 
 
 if __name__ == "__main__":

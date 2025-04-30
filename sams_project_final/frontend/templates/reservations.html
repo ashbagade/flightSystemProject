@@ -1,38 +1,74 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Reservations - SAMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="p-4">
-    <div class="container">
-        <h1 class="mb-4">Reservations</h1>
-        
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Person ID</th>
-                        <th>Airport ID</th>
-                        <th>Sequence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for reservation in reservations %}
-                    <tr>
-                        <td>{{ reservation.personID }}</td>
-                        <td>{{ reservation.airportID }}</td>
-                        <td>{{ reservation.sequence }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+{% extends 'base.html' %}
 
-        <div class="mt-4">
-            <a href="/" class="btn btn-primary">Back to Home</a>
+{% block title %}Reservations{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Reservations</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Person ID</th>
+                    <th>Airport ID</th>
+                    <th>Sequence</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                <tr>
+                    <td>{{ reservation.personID }}</td>
+                    <td>{{ reservation.airportID }}</td>
+                    <td>{{ reservation.sequence }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_reservation', pid=reservation.personID, aid=reservation.airportID) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addReservationModal">
+            Add New Reservation
+        </button>
+    </div>
+
+    <!-- Add Reservation Modal -->
+    <div class="modal fade" id="addReservationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Reservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ url_for('add_reservation') }}" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="personID" class="form-label">Person ID</label>
+                            <input type="text" class="form-control" id="personID" name="personID" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="airportID" class="form-label">Airport ID</label>
+                            <input type="text" class="form-control" id="airportID" name="airportID" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sequence" class="form-label">Sequence</label>
+                            <input type="number" class="form-control" id="sequence" name="sequence" required min="1">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Reservation</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

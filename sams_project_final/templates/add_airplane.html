@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Airplane{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Add Airplane</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="airline_id">Airline ID</label>
+                        <input type="text" class="form-control" id="airline_id" name="airline_id" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="tail_num">Tail Num</label>
+                        <input type="text" class="form-control" id="tail_num" name="tail_num" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="seat_cap">Seat Capacity</label>
+                        <input type="number" class="form-control" id="seat_cap" name="seat_cap" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="speed">Speed</label>
+                        <input type="number" class="form-control" id="speed" name="speed" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="location_id">Location ID</label>
+                        <input type="text" class="form-control" id="location_id" name="location_id" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="plane_type">Plane Type</label>
+                        <input type="text" class="form-control" id="plane_type" name="plane_type" required>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="maintained">Maintained</label>
+                        <input type="text" class="form-control" id="maintained" name="maintained">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="model">Model</label>
+                        <input type="text" class="form-control" id="model" name="model">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="neo">Neo</label>
+                        <select class="form-control" id="neo" name="neo">
+                            <option value="TRUE">TRUE</option>
+                            <option value="FALSE" selected>FALSE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Add</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

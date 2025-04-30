@@ -1,24 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>SAMS Home</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.4.3/dist/css/bootstrap.min.css"
-    rel="stylesheet">
-</head>
-<body class="p-4">
-  <div class="container">
-    <h1 class="mb-4">Simple Airline Management System</h1>
-    
-    <div class="list-group">
-      <a href="/airlines" class="list-group-item list-group-item-action">Airlines</a>
-      <a href="/airports" class="list-group-item list-group-item-action">Airports</a>
-      <a href="/passengers" class="list-group-item list-group-item-action">Passengers</a>
-      <a href="/pilots" class="list-group-item list-group-item-action">Pilots</a>
-      <a href="/flights" class="list-group-item list-group-item-action">Flights</a>
-      <a href="/reservations" class="list-group-item list-group-item-action">Reservations</a>
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to SAMS</h1>
+        <p class="lead">Simple Airline Management System</p>
+        <hr class="my-4">
+        <p>Use the navigation menu above to manage flights, people, airplanes, and airports.</p>
     </div>
-  </div>
-</body>
-</html>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Flights</h5>
+                    <p class="card-text">View all flights currently in the air and on the ground.</p>
+                    <a href="{{ url_for('flights') }}" class="btn btn-primary">View Flights</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">People</h5>
+                    <p class="card-text">Track passengers and pilots in the system.</p>
+                    <a href="{{ url_for('passengers') }}" class="btn btn-primary">View Passengers</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Management</h5>
+                    <p class="card-text">Manage airlines, airports, and other resources.</p>
+                    <a href="{{ url_for('airlines') }}" class="btn btn-primary">View Airlines</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
