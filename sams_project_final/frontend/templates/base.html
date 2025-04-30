@@ -22,15 +22,27 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
+                    <!-- Main Pages -->
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('flights') }}">Flights</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('airlines') }}">Airlines</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('airports') }}">Airports</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('passengers') }}">Passengers</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('pilots') }}">Pilots</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('reservations') }}">Reservations</a></li>
+                    
+                    <!-- Flight Management -->
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('offer_flight') }}">Offer Flight</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('assign_pilot') }}">Assign Pilot</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('disembark_passengers') }}">Disembark Passengers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('flight_landing') }}">Flight Landing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('flight_takeoff') }}">Flight Takeoff</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('passengers_board') }}">Passengers Board</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('retire_flight') }}">Retire Flight</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('simulation_cycle') }}">Simulation Cycle</a></li>
+                    
+                    <!-- Person Management -->
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('add_person') }}">Add Person</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('pilot_license') }}">Pilot License</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('offer_flight') }}">Offer Flight</a></li>
                 </ul>
             </div>
         </div>

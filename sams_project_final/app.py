@@ -376,6 +376,53 @@ def delete_flight(fid):
         flash(handle_db_error(e, "deleting flight"), "danger")
     return redirect(url_for('flights'))
 
+@app.route('/flights/assign_pilot', methods=['GET', 'POST'])
+def assign_pilot():
+    if request.method == 'POST':
+        flightID = request.form['flightID']
+        pilotID = request.form['pilotID']
+        
+        try:
+            cursor = get_db_connection().cursor()
+            cursor.execute("""
+                INSERT INTO pilot_assignment (flightID, pilotID)
+                VALUES (%s, %s)
+            """, (flightID, pilotID))
+            get_db_connection().commit()
+            flash('Pilot assigned successfully!', 'success')
+        except Exception as e:
+            flash(f'Error assigning pilot: {str(e)}', 'danger')
+        finally:
+            cursor.close()
+        
+        return redirect(url_for('assign_pilot'))
+    
+    return render_template('assign_pilot.html')
+
+@app.route('/flights/disembark', methods=['GET', 'POST'])
+def disembark_passengers():
+    if request.method == 'POST':
+        flightID = request.form['flightID']
+        passengerIDs = [pid.strip() for pid in request.form['passengerIDs'].split(',')]
+        
+        try:
+            cursor = get_db_connection().cursor()
+            for passengerID in passengerIDs:
+                cursor.execute("""
+                    DELETE FROM reservation
+                    WHERE flightID = %s AND passengerID = %s
+                """, (flightID, passengerID))
+            get_db_connection().commit()
+            flash('Passengers disembarked successfully!', 'success')
+        except Exception as e:
+            flash(f'Error disembarking passengers: {str(e)}', 'danger')
+        finally:
+            cursor.close()
+        
+        return redirect(url_for('disembark_passengers'))
+    
+    return render_template('disembark_passengers.html')
+
 # ─── PASSENGERS ──────────────────────────────────────────────────────────────────
 @app.route('/passengers')
 def passengers():
@@ -705,6 +752,128 @@ def offer_flight():
                 conn.close()
         return redirect(url_for('flights'))
     return render_template('offer_flight.html')
+
+# ─── FLIGHT MANAGEMENT PROCEDURES ────────────────────────────────────────────────
+@app.route('/flight_landing', methods=['GET', 'POST'])
+def flight_landing():
+    if request.method == 'POST':
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('flight_landing'))
+            
+            flight_id = request.form.get('flight_id')
+            
+            with conn.cursor() as cur:
+                cur.callproc('flight_landing', (flight_id,))
+                conn.commit()
+            flash('Flight landing recorded successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "recording flight landing"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('flight_landing'))
+    return render_template('flight_landing.html')
+
+@app.route('/flight_takeoff', methods=['GET', 'POST'])
+def flight_takeoff():
+    if request.method == 'POST':
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('flight_takeoff'))
+            
+            flight_id = request.form.get('flight_id')
+            
+            with conn.cursor() as cur:
+                cur.callproc('flight_takeoff', (flight_id,))
+                conn.commit()
+            flash('Flight takeoff recorded successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "recording flight takeoff"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('flight_takeoff'))
+    return render_template('flight_takeoff.html')
+
+@app.route('/passengers_board', methods=['GET', 'POST'])
+def passengers_board():
+    if request.method == 'POST':
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('passengers_board'))
+            
+            flight_id = request.form.get('flight_id')
+            
+            with conn.cursor() as cur:
+                cur.callproc('passengers_board', (flight_id,))
+                conn.commit()
+            flash('Passenger boarding recorded successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "recording passenger boarding"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('passengers_board'))
+    return render_template('passengers_board.html')
+
+@app.route('/retire_flight', methods=['GET', 'POST'])
+def retire_flight():
+    if request.method == 'POST':
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('retire_flight'))
+            
+            flight_id = request.form.get('flight_id')
+            
+            with conn.cursor() as cur:
+                cur.callproc('retire_flight', (flight_id,))
+                conn.commit()
+            flash('Flight retired successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "retiring flight"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('retire_flight'))
+    return render_template('retire_flight.html')
+
+@app.route('/simulation_cycle', methods=['GET', 'POST'])
+def simulation_cycle():
+    if request.method == 'POST':
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('simulation_cycle'))
+            
+            cycles = int(request.form.get('cycles', 1))
+            
+            with conn.cursor() as cur:
+                for _ in range(cycles):
+                    cur.callproc('simulation_cycle')
+                    conn.commit()
+            flash(f'Simulation completed for {cycles} cycle(s)!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "running simulation"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('simulation_cycle'))
+    return render_template('simulation_cycle.html')
 
 if __name__ == '__main__':
     app.run(debug=True) 

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Assign Pilot{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Assign Pilot to Flight</h2>
+    
+    <form action="{{ url_for('assign_pilot') }}" method="POST">
+        <div class="mb-3">
+            <label for="flightID" class="form-label">Flight ID</label>
+            <input type="text" class="form-control" id="flightID" name="flightID" required>
+        </div>
+        <div class="mb-3">
+            <label for="pilotID" class="form-label">Pilot ID</label>
+            <input type="text" class="form-control" id="pilotID" name="pilotID" required>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Assign Pilot</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 

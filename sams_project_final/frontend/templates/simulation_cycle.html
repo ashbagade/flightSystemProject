@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation Cycle{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Simulation Cycle</h2>
+    <form method="POST" action="{{ url_for('simulation_cycle') }}">
+        <div class="mb-3">
+            <label for="cycles" class="form-label">Number of Cycles</label>
+            <input type="number" class="form-control" id="cycles" name="cycles" min="1" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Run Simulation</button>
+    </form>
+</div>
+{% endblock %} 

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Disembark Passengers{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Disembark Passengers from Flight</h2>
+    
+    <form action="{{ url_for('disembark_passengers') }}" method="POST">
+        <div class="mb-3">
+            <label for="flightID" class="form-label">Flight ID</label>
+            <input type="text" class="form-control" id="flightID" name="flightID" required>
+        </div>
+        <div class="mb-3">
+            <label for="passengerIDs" class="form-label">Passenger IDs (comma-separated)</label>
+            <input type="text" class="form-control" id="passengerIDs" name="passengerIDs" required>
+        </div>
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary">Disembark Passengers</button>
+        </div>
+    </form>
+</div>
+{% endblock %} 
