@@ -63,7 +63,119 @@ def get_table_schema(table_name):
 def index():
     """Home page route"""
     return render_template('index.html')
+# ─── AIRPLANES ────────────────────────────────────────────────────────────────────
+@app.route('/airplanes')
+def airplanes():
+    """Display all airplanes"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('airplanes.html', airplanes=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM airplane;")
+            data = cur.fetchall()
+        return render_template('airplanes.html', airplanes=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching airplanes"), "danger")
+        return render_template('airplanes.html', airplanes=[])
+    finally:
+        if conn:
+            conn.close()
 
+@app.route('/airplanes/add', methods=['GET', 'POST'])
+def add_airplane():
+    """Add a new airplane using the stored procedure"""
+    if request.method == 'GET':
+        return render_template('add_airplane.html')
+        
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return redirect(url_for('airplanes'))
+            
+        f = request.form
+        
+        # Convert form values to appropriate types for the procedure
+        airlineID = f['airlineID']
+        tail_num = f['tail_num']
+        seat_capacity = int(f['seat_capacity']) if f['seat_capacity'] else None
+        speed = int(f['speed']) if f['speed'] else None
+        locationID = f['locationID']
+        plane_type = f['plane_type'] if f['plane_type'] else None
+        
+        # Handle boolean fields
+        maintenanced = None
+        if f.get('maintenanced') == 'TRUE':
+            maintenanced = True
+        elif f.get('maintenanced') == 'FALSE':
+            maintenanced = False
+        
+        model = f['model'] if f.get('model') and f['model'] != 'NULL' else None
+        
+        neo = None
+        if f.get('neo') == 'TRUE':
+            neo = True
+        elif f.get('neo') == 'FALSE':
+            neo = False
+        
+        # Call the stored procedure
+        with conn.cursor() as cur:
+            cur.callproc('add_airplane', 
+                         [airlineID, tail_num, seat_capacity, speed, locationID, 
+                          plane_type, maintenanced, model, neo])
+            conn.commit()
+        
+        flash('Airplane added successfully!', 'success')
+        return redirect(url_for('airplanes'))
+    except Exception as e:
+        flash(handle_db_error(e, "adding airplane"), "danger")
+        return redirect(url_for('airplanes'))
+    finally:
+        if conn:
+            conn.close()
+
+@app.route('/airplanes/delete/<airline_id>/<tail_num>', methods=['POST'])
+def delete_airplane(airline_id, tail_num):
+    """Delete an airplane"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return redirect(url_for('airplanes'))
+            
+        with conn.cursor() as cur:
+            # First find the locationID to delete it after
+            cur.execute("SELECT locationID FROM airplane WHERE airlineID=%s AND tail_num=%s", 
+                        (airline_id, tail_num))
+            result = cur.fetchone()
+            
+            if result:
+                locationID = result['locationID']
+                
+                # Delete the airplane
+                cur.execute("DELETE FROM airplane WHERE airlineID=%s AND tail_num=%s", 
+                            (airline_id, tail_num))
+                
+                # Then delete the location
+                if locationID:
+                    cur.execute("DELETE FROM location WHERE locationID=%s", (locationID,))
+                
+                conn.commit()
+                flash('Airplane deleted successfully!', 'success')
+            else:
+                flash('Airplane not found', 'warning')
+    except Exception as e:
+        flash(handle_db_error(e, "deleting airplane"), "danger")
+    finally:
+        if conn:
+            conn.close()
+    return redirect(url_for('airplanes'))
 # ─── AIRLINE ─────────────────────────────────────────────────────────────────────
 @app.route('/airlines')
 def airlines():

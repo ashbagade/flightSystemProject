@@ -2,7 +2,7 @@ class Config:
     # Database configuration
     DB_HOST = 'localhost'
     DB_USER = 'root'
-    DB_PASSWORD = 'SheSeekMyWellFR9'
+    DB_PASSWORD = 'mysql123'
     DB_NAME = 'flight_tracking'
     
     # Flask configuration
