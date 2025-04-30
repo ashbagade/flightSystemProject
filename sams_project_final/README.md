@@ -74,5 +74,7 @@ sams_project_final/
   We have basic HTML pages that allow users to interact with our backing database, powered by a Flash backend.
 
 ## Team Members
+Akshat, Druvitha, Samay, Fareed
 
-All team members worked equally on a combination of implementing procedures and views, frontend development, and debugging.
+## Work Split Up: 
+All members worked on the project. Akshat worked on fixing the phase3 database and on procedures UI, Druvitha worked on proceudres UI and routing, Samay worked on views, routing, and the UI for views. Fareed worked comprehensively throughout the whole project and worked on all procuders, views, and the full stack application. 
