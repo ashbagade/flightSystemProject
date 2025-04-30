@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}People In The Air{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">People Currently In The Air</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Departing From</th>
+                    <th>Arriving At</th>
+                    <th>Number of Airplanes</th>
+                    <th>Airplane List</th>
+                    <th>Flight List</th>
+                    <th>Earliest Arrival</th>
+                    <th>Latest Arrival</th>
+                    <th>Pilots</th>
+                    <th>Passengers</th>
+                    <th>Total People</th>
+                    <th>Person List</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for person in people %}
+                <tr>
+                    <td>{{ person.departing_from }}</td>
+                    <td>{{ person.arriving_at }}</td>
+                    <td>{{ person.num_airplanes }}</td>
+                    <td>{{ person.airplane_list }}</td>
+                    <td>{{ person.flight_list }}</td>
+                    <td>{{ person.earliest_arrival }}</td>
+                    <td>{{ person.latest_arrival }}</td>
+                    <td>{{ person.num_pilots }}</td>
+                    <td>{{ person.num_passengers }}</td>
+                    <td>{{ person.joint_pilots_passengers }}</td>
+                    <td>{{ person.person_list }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not people %}
+    <div class="alert alert-info">No people are currently in the air.</div>
+    {% endif %}
+</div>
+{% endblock %}

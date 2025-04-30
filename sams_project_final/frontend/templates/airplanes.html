@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Airplanes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Airplanes</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Airline ID</th>
+                    <th>Tail Number</th>
+                    <th>Seat Capacity</th>
+                    <th>Speed</th>
+                    <th>Location ID</th>
+                    <th>Plane Type</th>
+                    <th>Maintained</th>
+                    <th>Model</th>
+                    <th>Neo</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for airplane in airplanes %}
+                <tr>
+                    <td>{{ airplane.airlineID }}</td>
+                    <td>{{ airplane.tail_num }}</td>
+                    <td>{{ airplane.seat_capacity }}</td>
+                    <td>{{ airplane.speed }}</td>
+                    <td>{{ airplane.locationID }}</td>
+                    <td>{{ airplane.plane_type or 'N/A' }}</td>
+                    <td>{{ airplane.maintenanced if airplane.maintenanced is not none else 'NULL' }}</td>
+                    <td>{{ airplane.model or 'NULL' }}</td>
+                    <td>{{ airplane.neo if airplane.neo is not none else 'NULL' }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_airplane', airline_id=airplane.airlineID, tail_num=airplane.tail_num) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ url_for('add_airplane') }}" class="btn btn-success">Add New Airplane</a>
+    </div>
+</div>
+{% endblock %}

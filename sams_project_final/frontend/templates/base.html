@@ -24,6 +24,7 @@
                 <ul class="navbar-nav">
                     <!-- Main Pages -->
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('flights') }}">Flights</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('airplanes') }}">Airplanes</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('airlines') }}">Airlines</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('airports') }}">Airports</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('passengers') }}">Passengers</a></li>
@@ -43,6 +44,21 @@
                     <!-- Person Management -->
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('add_person') }}">Add Person</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('pilot_license') }}">Pilot License</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('offer_flight') }}">Offer Flight</a></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="statusDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Flight Status
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('flights_in_the_air') }}">Flights In The Air</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('flights_on_the_ground') }}">Flights On The Ground</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('people_in_the_air') }}">People In The Air</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('people_on_the_ground') }}">People On The Ground</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('route_summary') }}">Route Summary</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('alternative_airports') }}">Alternative Airports</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
