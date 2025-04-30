@@ -591,5 +591,120 @@ def health_check():
         if conn:
             conn.close()
 
+# ─── ADD PERSON ────────────────────────────────────────────────────────────────
+@app.route('/persons/add', methods=['GET', 'POST'])
+def add_person():
+    if request.method == 'POST':
+        f = request.form
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('passengers'))
+            # Insert into person table
+            sql_person = """
+                INSERT INTO person (personID, first_name, last_name, locationID, taxID, experience)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            # Insert into passenger table for miles/funds if provided
+            sql_passenger = """
+                INSERT INTO passenger (personID, miles, funds)
+                VALUES (%s, %s, %s)
+            """
+            with conn.cursor() as cur:
+                cur.execute(sql_person, (
+                    f['personID'],
+                    f['first_name'],
+                    f['last_name'],
+                    f['locationID'],
+                    f['taxID'],
+                    f.get('experience') or None
+                ))
+                # Only insert into passenger if at least one of miles/funds is provided
+                if f.get('miles') or f.get('funds'):
+                    cur.execute(sql_passenger, (
+                        f['personID'],
+                        f.get('miles') or None,
+                        f.get('funds') or None
+                    ))
+                conn.commit()
+            flash('Person added successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "adding person"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('passengers'))
+    return render_template('add_person.html')
+
+# ─── PILOT LICENSE ──────────────────────────────────────────────────────────────
+@app.route('/pilot_license', methods=['GET', 'POST'])
+def pilot_license():
+    if request.method == 'POST':
+        f = request.form
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('pilots'))
+            # Check if license exists for this pilot
+            sql_check = "SELECT * FROM pilot_license WHERE personID=%s AND license=%s"
+            sql_insert = "INSERT INTO pilot_license (personID, license) VALUES (%s, %s)"
+            sql_delete = "DELETE FROM pilot_license WHERE personID=%s AND license=%s"
+            with conn.cursor() as cur:
+                cur.execute(sql_check, (f['personID'], f['license']))
+                exists = cur.fetchone()
+                if exists:
+                    cur.execute(sql_delete, (f['personID'], f['license']))
+                    flash('License revoked successfully!', 'success')
+                else:
+                    cur.execute(sql_insert, (f['personID'], f['license']))
+                    flash('License granted successfully!', 'success')
+                conn.commit()
+        except Exception as e:
+            flash(handle_db_error(e, "grant/revoke pilot license"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('pilots'))
+    return render_template('pilot_license.html')
+
+# ─── OFFER FLIGHT ───────────────────────────────────────────────────────────────
+@app.route('/flights/offer', methods=['GET', 'POST'])
+def offer_flight():
+    if request.method == 'POST':
+        f = request.form
+        conn = None
+        try:
+            conn = get_db_connection()
+            if not conn:
+                flash("Database connection error", "danger")
+                return redirect(url_for('flights'))
+            sql = """
+                INSERT INTO flight (flightID, routeID, support_airline, support_tail, progress, next_time, cost)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """
+            with conn.cursor() as cur:
+                cur.execute(sql, (
+                    f['flightID'],
+                    f['routeID'],
+                    f['support_airline'],
+                    f['support_tail'],
+                    f['progress'],
+                    f['next_time'],
+                    f['cost']
+                ))
+                conn.commit()
+            flash('Flight offered successfully!', 'success')
+        except Exception as e:
+            flash(handle_db_error(e, "offering flight"), "danger")
+        finally:
+            if conn:
+                conn.close()
+        return redirect(url_for('flights'))
+    return render_template('offer_flight.html')
+
 if __name__ == '__main__':
     app.run(debug=True) 
