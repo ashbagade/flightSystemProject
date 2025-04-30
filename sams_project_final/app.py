@@ -818,5 +818,140 @@ def offer_flight():
         return redirect(url_for('flights'))
     return render_template('offer_flight.html')
 
+# VIEWS
+
+# ─── FLIGHTS IN THE AIR ────────────────────────────────────────────────────────
+@app.route('/flights_in_the_air')
+def flights_in_the_air():
+    """Display all flights currently in the air"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('flights_in_the_air.html', flights=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM flights_in_the_air;")
+            data = cur.fetchall()
+        return render_template('flights_in_the_air.html', flights=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching flights in the air"), "danger")
+        return render_template('flights_in_the_air.html', flights=[])
+    finally:
+        if conn:
+            conn.close()
+
+# ─── FLIGHTS ON THE GROUND ────────────────────────────────────────────────────
+@app.route('/flights_on_the_ground')
+def flights_on_the_ground():
+    """Display all flights currently on the ground"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('flights_on_the_ground.html', flights=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM flights_on_the_ground;")
+            data = cur.fetchall()
+        return render_template('flights_on_the_ground.html', flights=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching flights on the ground"), "danger")
+        return render_template('flights_on_the_ground.html', flights=[])
+    finally:
+        if conn:
+            conn.close()
+
+# ─── PEOPLE IN THE AIR ────────────────────────────────────────────────────────
+@app.route('/people_in_the_air')
+def people_in_the_air():
+    """Display all people currently in the air"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('people_in_the_air.html', people=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM people_in_the_air;")
+            data = cur.fetchall()
+        return render_template('people_in_the_air.html', people=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching people in the air"), "danger")
+        return render_template('people_in_the_air.html', people=[])
+    finally:
+        if conn:
+            conn.close()
+
+# ─── PEOPLE ON THE GROUND ────────────────────────────────────────────────────
+@app.route('/people_on_the_ground')
+def people_on_the_ground():
+    """Display all people currently on the ground"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('people_on_the_ground.html', people=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM people_on_the_ground;")
+            data = cur.fetchall()
+        return render_template('people_on_the_ground.html', people=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching people on the ground"), "danger")
+        return render_template('people_on_the_ground.html', people=[])
+    finally:
+        if conn:
+            conn.close()
+
+# ─── ROUTE SUMMARY ────────────────────────────────────────────────────────────
+@app.route('/route_summary')
+def route_summary():
+    """Display summary of all routes"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('route_summary.html', routes=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM route_summary;")
+            data = cur.fetchall()
+        return render_template('route_summary.html', routes=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching route summaries"), "danger")
+        return render_template('route_summary.html', routes=[])
+    finally:
+        if conn:
+            conn.close()
+
+# ─── ALTERNATIVE AIRPORTS ────────────────────────────────────────────────────
+@app.route('/alternative_airports')
+def alternative_airports():
+    """Display cities with multiple airports"""
+    conn = None
+    try:
+        conn = get_db_connection()
+        if not conn:
+            flash("Database connection error", "danger")
+            return render_template('alternative_airports.html', cities=[])
+            
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM alternative_airports;")
+            data = cur.fetchall()
+        return render_template('alternative_airports.html', cities=data)
+    except Exception as e:
+        flash(handle_db_error(e, "fetching alternative airports"), "danger")
+        return render_template('alternative_airports.html', cities=[])
+    finally:
+        if conn:
+            conn.close()
+
+
 if __name__ == '__main__':
     app.run(debug=True) 

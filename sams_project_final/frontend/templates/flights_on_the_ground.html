@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Flights On The Ground{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Flights Currently On The Ground</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Departing From</th>
+                    <th>Number of Flights</th>
+                    <th>Flight List</th>
+                    <th>Earliest Arrival</th>
+                    <th>Latest Arrival</th>
+                    <th>Airplane List</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight.departing_from }}</td>
+                    <td>{{ flight.num_flights }}</td>
+                    <td>{{ flight.flight_list }}</td>
+                    <td>{{ flight.earliest_arrival }}</td>
+                    <td>{{ flight.latest_arrival }}</td>
+                    <td>{{ flight.airplane_list }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if not flights %}
+    <div class="alert alert-info">No flights are currently on the ground.</div>
+    {% endif %}
+</div>
+{% endblock %}
