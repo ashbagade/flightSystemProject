@@ -98,7 +98,7 @@ body {
     font-weight: bold;
 }
 
-/* Responsive Adjustments */
+/* Adjustment Stuff */
 @media (max-width: 768px) {
     .container {
         padding: 10px;

@@ -9,15 +9,15 @@ def client():
         yield client
 
 def test_db_config():
-    """Test that database configuration is loaded correctly"""
-    # Check if config values are set
+    #est that database configuration is loaded correctly
+   
     db_config = Config.get_db_config()
     assert db_config['host'] is not None, "DB_HOST not configured"
     assert db_config['user'] is not None, "DB_USER not configured"
     assert db_config['password'] is not None, "DB_PASSWORD not configured"
     assert db_config['database'] is not None, "DB_NAME not configured"
     
-    # Test database connection
+    
     try:
         conn = get_db_connection()
         assert conn is not None, "Failed to establish database connection"
@@ -95,7 +95,7 @@ def test_edit_airport_get(client):
 
 def test_edit_airport_post(client):
     """Test updating an airport"""
-    # Try updating an existing airport (you may need to change this ID based on your test data)
+    # Try updating an existing airport
     response = client.post('/airports/edit/CDG', data={
         'airport_code': 'CDG',
         'airport_name': 'Charles de Gaulle Airport',
@@ -113,7 +113,7 @@ def test_add_airport(client):
         'airport_name': 'Test Airport',
         'city': 'Test',
         'state': 'TS',  # 2-char code
-        'country': 'USA',  # Short country name
+        'country': 'USA',  
         'locationID': '1'
     }, follow_redirects=True)
     assert response.status_code == 200
@@ -127,7 +127,7 @@ def test_add_airport(client):
 
 def test_edit_airport_validation(client):
     """Test airport edit validation"""
-    # Test with missing required fields
+    # Test mising
     response = client.post('/airports/edit/TEST', data={
         'airport_name': '',
         'city': '',
@@ -139,7 +139,7 @@ def test_edit_airport_validation(client):
 
 def test_delete_airport(client):
     """Test deleting an airport"""
-    # First add a test airport
+   
     client.post('/airports/add', data={
         'airportID': 'DEL',
         'airport_name': 'Delete Test Airport',
@@ -149,7 +149,7 @@ def test_delete_airport(client):
         'locationID': '1'
     })
     
-    # Then try to delete it
+    
     response = client.post('/airports/delete/DEL', follow_redirects=True)
     assert response.status_code == 200
     assert b'Airport deleted successfully!' in response.data
@@ -158,11 +158,11 @@ def test_get_table_schema():
     """Test schema retrieval function"""
     from app import get_table_schema
     
-    # Test airport table schema
+   
     schema = get_table_schema('airport')
     assert schema is not None
     
-    # Verify required fields exist
+ 
     field_names = [field['Field'] for field in schema]
     required_fields = ['airportID', 'airport_name', 'city', 'state', 'country', 'locationID']
     for field in required_fields:

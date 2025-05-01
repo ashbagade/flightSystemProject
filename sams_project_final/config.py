@@ -1,5 +1,5 @@
 class Config:
-    # Database configuration
+    # Database configuration - Make sure to update this stuff so that it is your actual MySQL login from class
     DB_HOST = 'localhost'
     DB_USER = 'root'
     DB_PASSWORD = 'mysql123'

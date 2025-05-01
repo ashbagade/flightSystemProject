@@ -7,7 +7,7 @@ app = Flask(__name__,
            template_folder='frontend/templates',
            static_folder='frontend/static')
 
-# Set a secret key for flash messages
+
 app.secret_key = Config.SECRET_KEY
 
 DB_CONFIG = {
@@ -16,8 +16,11 @@ DB_CONFIG = {
     'port': 3306
 }
 
+# Note: If yall are not getting any data and stuff if null/missing check to see if ur
+# acttually connected to da db or not 
+
 def get_db_connection():
-    """Get a database connection with proper error handling"""
+    #Get a database connection and handle errors (hopefully)
     try:
         conn = pymysql.connect(**DB_CONFIG)
         return conn
@@ -26,26 +29,25 @@ def get_db_connection():
         return None
 
 def handle_db_error(e, operation):
-    """Handle database errors and return user-friendly messages"""
+    
     if not hasattr(e, 'args') or len(e.args) == 0:
         return f"Database error during {operation}"
         
     error_code = e.args[0]
-    if error_code == 1451:  # Cannot delete or update a parent row (foreign key constraint)
+    if error_code == 1451:  
         return "Cannot delete this record because it is being used by other records in the system."
-    elif error_code == 1452:  # Cannot add or update a child row (foreign key not found)
+    elif error_code == 1452: 
         return "Cannot add/update this record because it references a non-existent record."
-    elif error_code == 1062:  # Duplicate entry
+    elif error_code == 1062:  
         return "A record with this ID already exists."
-    elif error_code == 1216:  # Cannot add or update a child row (foreign key constraint)
+    elif error_code == 1216:  
         return "Cannot add/update this record due to invalid references."
-    elif error_code == 1217:  # Cannot delete or update a parent row (foreign key constraint)
-        return "Cannot delete this record as it would break existing relationships."
+    elif error_code == 1217:  
+        return "Cannot delete this record becuz it would break existing relationships."
     else:
         return f"Database error during {operation}: {str(e)}"
 
 def get_table_schema(table_name):
-    """Get the schema of a table"""
     try:
         conn = get_db_connection()
         with conn.cursor() as cursor:
@@ -58,15 +60,13 @@ def get_table_schema(table_name):
         if 'conn' in locals():
             conn.close()
 
-# ─── Home ────────────────────────────────────────────────────────────────────────
+
 @app.route('/')
 def index():
-    """Home page route"""
-    return render_template('index.html')
-# ─── AIRPLANES ────────────────────────────────────────────────────────────────────
+    return render_template('index.html') # home page
+
 @app.route('/airplanes')
 def airplanes():
-    """Display all airplanes"""
     conn = None
     try:
         conn = get_db_connection()
@@ -100,7 +100,7 @@ def add_airplane():
             
         f = request.form
         
-        # Convert form values to appropriate types for the procedure
+        
         airlineID = f['airlineID']
         tail_num = f['tail_num']
         seat_capacity = int(f['seat_capacity']) if f['seat_capacity'] else None
@@ -108,7 +108,7 @@ def add_airplane():
         locationID = f['locationID']
         plane_type = f['plane_type'] if f['plane_type'] else None
         
-        # Handle boolean fields
+        
         maintenanced = None
         if f.get('maintenanced') == 'TRUE':
             maintenanced = True
@@ -176,10 +176,10 @@ def delete_airplane(airline_id, tail_num):
         if conn:
             conn.close()
     return redirect(url_for('airplanes'))
-# ─── AIRLINE ─────────────────────────────────────────────────────────────────────
+
+
 @app.route('/airlines')
 def airlines():
-    """Display all airlines"""
     conn = None
     try:
         conn = get_db_connection()
@@ -260,10 +260,9 @@ def delete_airline(aid):
         flash(handle_db_error(e, "deleting airline"), "danger")
     return redirect(url_for('airlines'))
 
-# ─── AIRPORT ─────────────────────────────────────────────────────────────────────
+
 @app.route('/airports')
 def airports():
-    """Display all airports"""
     conn = None
     try:
         conn = get_db_connection()
@@ -381,10 +380,9 @@ def delete_airport(airportID):
             conn.close()
     return redirect(url_for('airports'))
 
-# ─── FLIGHTS ─────────────────────────────────────────────────────────────────────
+
 @app.route('/flights')
 def flights():
-    """Display all flights"""
     conn = None
     try:
         conn = get_db_connection()
@@ -535,10 +533,8 @@ def disembark_passengers():
     
     return render_template('disembark_passengers.html')
 
-# ─── PASSENGERS ──────────────────────────────────────────────────────────────────
 @app.route('/passengers')
 def passengers():
-    """Display all passengers"""
     conn = None
     try:
         conn = get_db_connection()
@@ -557,10 +553,10 @@ def passengers():
         if conn:
             conn.close()
 
-# ─── PILOTS ──────────────────────────────────────────────────────────────────────
+
 @app.route('/pilots')
 def pilots():
-    """Display all pilots"""
+    """Display all pilots""" #bruh u dont gotta make comments like this, ts obvious 😭
     conn = None
     try:
         conn = get_db_connection()
@@ -653,10 +649,9 @@ def delete_pilot(pid):
         flash(handle_db_error(e, "deleting pilot"), "danger")
     return redirect(url_for('pilots'))
 
-# ─── RESERVATIONS ────────────────────────────────────────────────────────────────
+
 @app.route('/reservations')
 def reservations():
-    """Display all reservations"""
     conn = None
     try:
         conn = get_db_connection()
@@ -750,7 +745,6 @@ def health_check():
         if conn:
             conn.close()
 
-# ─── ADD PERSON ────────────────────────────────────────────────────────────────
 @app.route('/persons/add', methods=['GET', 'POST'])
 def add_person():
     if request.method == 'POST':
@@ -797,7 +791,6 @@ def add_person():
         return redirect(url_for('passengers'))
     return render_template('add_person.html')
 
-# ─── PILOT LICENSE ──────────────────────────────────────────────────────────────
 @app.route('/pilot_license', methods=['GET', 'POST'])
 def pilot_license():
     if request.method == 'POST':
@@ -830,7 +823,7 @@ def pilot_license():
         return redirect(url_for('pilots'))
     return render_template('pilot_license.html')
 
-# ─── OFFER FLIGHT ───────────────────────────────────────────────────────────────
+
 @app.route('/flights/offer', methods=['GET', 'POST'])
 def offer_flight():
     if request.method == 'POST':
@@ -865,7 +858,7 @@ def offer_flight():
         return redirect(url_for('flights'))
     return render_template('offer_flight.html')
 
-# ─── FLIGHT MANAGEMENT PROCEDURES ────────────────────────────────────────────────
+
 @app.route('/flight_landing', methods=['GET', 'POST'])
 def flight_landing():
     if request.method == 'POST':
@@ -988,10 +981,10 @@ def simulation_cycle():
     return render_template('simulation_cycle.html')
 # VIEWS
 
-# ─── FLIGHTS IN THE AIR ────────────────────────────────────────────────────────
+
 @app.route('/flights_in_the_air')
 def flights_in_the_air():
-    """Display all flights currently in the air"""
+    """Display all flights currently in da air"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1010,10 +1003,9 @@ def flights_in_the_air():
         if conn:
             conn.close()
 
-# ─── FLIGHTS ON THE GROUND ────────────────────────────────────────────────────
+
 @app.route('/flights_on_the_ground')
 def flights_on_the_ground():
-    """Display all flights currently on the ground"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1032,10 +1024,9 @@ def flights_on_the_ground():
         if conn:
             conn.close()
 
-# ─── PEOPLE IN THE AIR ────────────────────────────────────────────────────────
+
 @app.route('/people_in_the_air')
 def people_in_the_air():
-    """Display all people currently in the air"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1054,10 +1045,8 @@ def people_in_the_air():
         if conn:
             conn.close()
 
-# ─── PEOPLE ON THE GROUND ────────────────────────────────────────────────────
 @app.route('/people_on_the_ground')
 def people_on_the_ground():
-    """Display all people currently on the ground"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1076,10 +1065,9 @@ def people_on_the_ground():
         if conn:
             conn.close()
 
-# ─── ROUTE SUMMARY ────────────────────────────────────────────────────────────
+
 @app.route('/route_summary')
 def route_summary():
-    """Display summary of all routes"""
     conn = None
     try:
         conn = get_db_connection()
@@ -1098,7 +1086,7 @@ def route_summary():
         if conn:
             conn.close()
 
-# ─── ALTERNATIVE AIRPORTS ────────────────────────────────────────────────────
+
 @app.route('/alternative_airports')
 def alternative_airports():
     """Display cities with multiple airports"""

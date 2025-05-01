@@ -1,6 +1,7 @@
 from app import get_db_connection, app
 import traceback
 
+# Hopfully this test actually does what is intended lol
 with app.app_context():
     try:
         conn = get_db_connection()
